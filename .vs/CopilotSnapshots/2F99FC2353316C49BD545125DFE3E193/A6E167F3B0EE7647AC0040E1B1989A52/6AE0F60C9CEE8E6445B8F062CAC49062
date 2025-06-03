@@ -1,0 +1,79 @@
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data; // Add for DataTable
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfApp1
+{
+    public partial class MainWindow : Window
+    {
+        private string _rowsInput = string.Empty;
+        private string _columnsInput = string.Empty;
+        private DataTable _gridData = new DataTable(); // Use DataTable for grid
+
+        public string RowsInput
+        {
+            get => _rowsInput;
+            set { _rowsInput = value; OnPropertyChanged(nameof(RowsInput)); }
+        }
+
+        public string ColumnsInput
+        {
+            get => _columnsInput;
+            set { _columnsInput = value; OnPropertyChanged(nameof(ColumnsInput)); }
+        }
+
+        public DataTable GridData
+        {
+            get => _gridData;
+            set { _gridData = value; OnPropertyChanged(nameof(GridData)); }
+        }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(RowsInput, out int rows) && int.TryParse(ColumnsInput, out int columns))
+            {
+                var table = new DataTable();
+                for (int j = 0; j < columns; j++)
+                {
+                    table.Columns.Add($"C{j}");
+                }
+                for (int i = 0; i < rows; i++)
+                {
+                    var row = table.NewRow();
+                    for (int j = 0; j < columns; j++)
+                    {
+                        row[j] = $"R{i}C{j}";
+                    }
+                    table.Rows.Add(row);
+                }
+                GridData = table;
+            }
+            else
+            {
+                MessageBox.Show("Please enter valid numbers for rows and columns.");
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+}
