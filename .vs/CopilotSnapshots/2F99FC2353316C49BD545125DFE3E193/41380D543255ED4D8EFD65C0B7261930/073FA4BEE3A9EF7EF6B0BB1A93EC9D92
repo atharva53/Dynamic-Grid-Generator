@@ -15,6 +15,8 @@
 
                 <TextBlock Text="Columns:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold" FontSize="15"/>
                 <TextBox Width="60" Height="28" Text="{Binding ColumnsInput, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,18,0" FontSize="15"/>
+
+                <Button Content="Generate Grid" Width="130" Height="32" Click="Button_Click" Background="#4f8cff" Foreground="White" FontWeight="Bold" FontSize="15" BorderBrush="#357ae8" BorderThickness="1"/>
             </StackPanel>
 
             <DataGrid Grid.Row="1"

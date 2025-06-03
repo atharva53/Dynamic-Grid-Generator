@@ -23,29 +23,13 @@ namespace WpfApp1
         public string RowsInput
         {
             get => _rowsInput;
-            set 
-            { 
-                if (_rowsInput != value) 
-                {
-                    _rowsInput = value; 
-                    OnPropertyChanged(nameof(RowsInput));
-                    RegenerateGridData();
-                }
-            }
+            set { _rowsInput = value; OnPropertyChanged(nameof(RowsInput)); }
         }
 
         public string ColumnsInput
         {
             get => _columnsInput;
-            set 
-            { 
-                if (_columnsInput != value) 
-                {
-                    _columnsInput = value; 
-                    OnPropertyChanged(nameof(ColumnsInput));
-                    RegenerateGridData();
-                }
-            }
+            set { _columnsInput = value; OnPropertyChanged(nameof(ColumnsInput)); }
         }
 
         public DataTable GridData
@@ -60,23 +44,31 @@ namespace WpfApp1
             DataContext = this;
         }
 
-        // Always recreate the DataTable to ensure DataGrid columns update
-        private void RegenerateGridData()
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns) || rows < 1 || columns < 1)
+            if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns))
             {
-                GridData = new DataTable();
+                MessageBox.Show("Please enter valid numbers for rows and columns.");
+                return;
+            }
+            if (rows < 1 || columns < 1)
+            {
+                MessageBox.Show("Rows and columns must be at least 1.");
                 return;
             }
 
             var table = new DataTable();
             for (int j = 0; j < columns; j++)
+            {
                 table.Columns.Add($"C{j + 1}");
+            }
             for (int i = 0; i < rows; i++)
             {
                 var row = table.NewRow();
                 for (int j = 0; j < columns; j++)
+                {
                     row[j] = $"R{i + 1}C{j + 1}";
+                }
                 table.Rows.Add(row);
             }
             GridData = table;

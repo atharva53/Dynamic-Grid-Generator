@@ -29,7 +29,7 @@ namespace WpfApp1
                 {
                     _rowsInput = value; 
                     OnPropertyChanged(nameof(RowsInput));
-                    RegenerateGridData();
+                    UpdateGridData();
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace WpfApp1
                 {
                     _columnsInput = value; 
                     OnPropertyChanged(nameof(ColumnsInput));
-                    RegenerateGridData();
+                    UpdateGridData();
                 }
             }
         }
@@ -60,26 +60,29 @@ namespace WpfApp1
             DataContext = this;
         }
 
-        // Always recreate the DataTable to ensure DataGrid columns update
-        private void RegenerateGridData()
+        private void UpdateGridData()
         {
             if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns) || rows < 1 || columns < 1)
             {
-                GridData = new DataTable();
+                _gridData.Clear();
+                while (_gridData.Columns.Count > 0) _gridData.Columns.RemoveAt(0);
                 return;
             }
 
-            var table = new DataTable();
+            // Always clear and recreate columns for reliability
+            _gridData.Clear();
+            _gridData.Columns.Clear();
             for (int j = 0; j < columns; j++)
-                table.Columns.Add($"C{j + 1}");
+                _gridData.Columns.Add($"C{j + 1}");
+
+            // Add rows
             for (int i = 0; i < rows; i++)
             {
-                var row = table.NewRow();
+                var row = _gridData.NewRow();
                 for (int j = 0; j < columns; j++)
                     row[j] = $"R{i + 1}C{j + 1}";
-                table.Rows.Add(row);
+                _gridData.Rows.Add(row);
             }
-            GridData = table;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

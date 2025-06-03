@@ -29,7 +29,7 @@ namespace WpfApp1
                 {
                     _rowsInput = value; 
                     OnPropertyChanged(nameof(RowsInput));
-                    RegenerateGridData();
+                    UpdateGridData();
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace WpfApp1
                 {
                     _columnsInput = value; 
                     OnPropertyChanged(nameof(ColumnsInput));
-                    RegenerateGridData();
+                    UpdateGridData();
                 }
             }
         }
@@ -60,26 +60,39 @@ namespace WpfApp1
             DataContext = this;
         }
 
-        // Always recreate the DataTable to ensure DataGrid columns update
-        private void RegenerateGridData()
+        private void UpdateGridData()
         {
             if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns) || rows < 1 || columns < 1)
             {
-                GridData = new DataTable();
+                _gridData.Clear();
+                while (_gridData.Columns.Count > 0) _gridData.Columns.RemoveAt(0);
                 return;
             }
 
-            var table = new DataTable();
-            for (int j = 0; j < columns; j++)
-                table.Columns.Add($"C{j + 1}");
-            for (int i = 0; i < rows; i++)
+            // Optimize: Only update columns if changed
+            if (_gridData.Columns.Count != columns)
             {
-                var row = table.NewRow();
+                _gridData.Clear();
+                _gridData.Columns.Clear();
                 for (int j = 0; j < columns; j++)
-                    row[j] = $"R{i + 1}C{j + 1}";
-                table.Rows.Add(row);
+                    _gridData.Columns.Add($"C{j + 1}");
             }
-            GridData = table;
+
+            // Adjust rows
+            while (_gridData.Rows.Count < rows)
+            {
+                var row = _gridData.NewRow();
+                for (int j = 0; j < columns; j++)
+                    row[j] = $"R{_gridData.Rows.Count + 1}C{j + 1}";
+                _gridData.Rows.Add(row);
+            }
+            while (_gridData.Rows.Count > rows)
+                _gridData.Rows.RemoveAt(_gridData.Rows.Count - 1);
+
+            // Update cell values
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < columns; j++)
+                    _gridData.Rows[i][j] = $"R{i + 1}C{j + 1}";
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
