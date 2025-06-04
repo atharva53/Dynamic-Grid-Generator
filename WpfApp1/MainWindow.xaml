@@ -18,7 +18,8 @@
             </StackPanel>
 
             <DataGrid Grid.Row="1"
-                      ItemsSource="{Binding GridData.DefaultView}"
+                      Name="RowColGrid"
+                   
                       AutoGenerateColumns="True"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"

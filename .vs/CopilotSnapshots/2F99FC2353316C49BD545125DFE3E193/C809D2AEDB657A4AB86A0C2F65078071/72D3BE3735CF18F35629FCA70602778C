@@ -18,6 +18,8 @@ namespace WpfApp1
     {
         private string _rowsInput = string.Empty;
         private string _columnsInput = string.Empty;
+       
+      
 
         public string RowsInput
         {
@@ -47,6 +49,8 @@ namespace WpfApp1
             }
         }
 
+      
+
         public MainWindow()
         {
             InitializeComponent();
@@ -58,11 +62,11 @@ namespace WpfApp1
         {
             if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns) || rows < 1 || columns < 1)
             {
-                RowColGrid.ItemsSource = null;
+               
                 return;
             }
 
-            var table = new DataTable();
+            
             for (int j = 0; j < columns; j++)
                 table.Columns.Add($"C{j + 1}");
             for (int i = 0; i < rows; i++)
@@ -72,7 +76,7 @@ namespace WpfApp1
                     row[j] = $"R{i + 1}C{j + 1}";
                 table.Rows.Add(row);
             }
-            RowColGrid.ItemsSource = table.DefaultView;
+           
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
