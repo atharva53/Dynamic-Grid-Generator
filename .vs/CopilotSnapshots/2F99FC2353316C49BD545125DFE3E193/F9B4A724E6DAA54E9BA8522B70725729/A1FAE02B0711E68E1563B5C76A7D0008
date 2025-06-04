@@ -1,0 +1,90 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace WpfApp1
+{
+    public partial class MainWindow : Window, INotifyPropertyChanged
+    {
+        private string _rowsInput = string.Empty;
+        private string _columnsInput = string.Empty;
+        private ObservableCollection<Dictionary<string, string>> _gridData = new();
+
+        public string RowsInput
+        {
+            get => _rowsInput;
+            set
+            {
+                if (_rowsInput != value)
+                {
+                    _rowsInput = value;
+                    OnPropertyChanged(nameof(RowsInput));
+                    RegenerateGridData();
+                }
+            }
+        }
+
+        public string ColumnsInput
+        {
+            get => _columnsInput;
+            set
+            {
+                if (_columnsInput != value)
+                {
+                    _columnsInput = value;
+                    OnPropertyChanged(nameof(ColumnsInput));
+                    RegenerateGridData();
+                }
+            }
+        }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+        }
+
+        private void RegenerateGridData()
+        {
+            if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns) || rows < 1 || columns < 1)
+            {
+                RowColGrid.ItemsSource = null;
+                RowColGrid.Columns.Clear();
+                return;
+            }
+
+            // Generate columns
+            RowColGrid.Columns.Clear();
+            for (int j = 0; j < columns; j++)
+            {
+                var col = new DataGridTextColumn
+                {
+                    Header = $"C{j + 1}",
+                    Binding = new System.Windows.Data.Binding($"[C{j + 1}]")
+                };
+                RowColGrid.Columns.Add(col);
+            }
+
+            // Generate data
+            var data = new ObservableCollection<Dictionary<string, string>>();
+            for (int i = 0; i < rows; i++)
+            {
+                var dict = new Dictionary<string, string>();
+                for (int j = 0; j < columns; j++)
+                {
+                    dict[$"C{j + 1}"] = $"R{i + 1}C{j + 1}";
+                }
+                data.Add(dict);
+            }
+            RowColGrid.ItemsSource = data;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+}

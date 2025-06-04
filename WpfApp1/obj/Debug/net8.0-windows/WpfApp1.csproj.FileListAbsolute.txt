@@ -18,3 +18,7 @@ C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\WpfApp1.pdb
 C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\WpfApp1.genruntimeconfig.cache
 C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\ref\WpfApp1.dll
 C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\WpfApp1.sourcelink.json
+C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\DynamicGridControl.baml
+C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\DynamicGridControl.g.cs
+C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\athar\source\repos\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\WpfApp1_MarkupCompile.lref

@@ -1,0 +1,84 @@
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data; 
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfApp1
+{
+    public partial class MainWindow : Window, INotifyPropertyChanged 
+    {
+        private string _rowsInput = string.Empty;
+        private string _columnsInput = string.Empty;
+
+        public string RowsInput
+        {
+            get { return _rowsInput; }
+            set 
+            { 
+                if (_rowsInput != value) 
+                {
+                    _rowsInput = value; 
+                    OnPropertyChanged(nameof(RowsInput));
+                    RegenerateGridData();
+                }
+            }
+        }
+
+        public string ColumnsInput
+        {
+            get { return _columnsInput; }
+            set 
+            { 
+                if (_columnsInput != value) 
+                {
+                    _columnsInput = value; 
+                    OnPropertyChanged(nameof(ColumnsInput));
+                    RegenerateGridData();
+                }
+            }
+        }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+        }
+
+        // Always recreate the DataTable to ensure DataGrid columns update
+        private void RegenerateGridData()
+        {
+            if (!int.TryParse(RowsInput, out int rows) || !int.TryParse(ColumnsInput, out int columns) || rows < 1 || columns < 1)
+            {
+                RowColGrid.ItemsSource = null;
+                return;
+            }
+
+            var table = new DataTable();
+            for (int j = 0; j < columns; j++)
+                table.Columns.Add($"C{j + 1}");
+            for (int i = 0; i < rows; i++)
+            {
+                var row = table.NewRow();
+                for (int j = 0; j < columns; j++)
+                    row[j] = $"R{i + 1}C{j + 1}";
+                table.Rows.Add(row);
+            }
+            RowColGrid.ItemsSource = table.DefaultView;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+}

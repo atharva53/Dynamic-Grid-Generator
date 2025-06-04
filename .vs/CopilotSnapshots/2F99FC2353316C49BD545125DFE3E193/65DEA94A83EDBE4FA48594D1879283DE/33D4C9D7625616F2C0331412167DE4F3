@@ -1,0 +1,48 @@
+﻿using System.ComponentModel;
+
+namespace WpfApp1
+{
+    public partial class MainWindow : Window, INotifyPropertyChanged
+    {
+        private string _rowsInput = string.Empty;
+        private string _columnsInput = string.Empty;
+
+        public string RowsInput
+        {
+            get { return _rowsInput; }
+            set
+            {
+                if (_rowsInput != value)
+                {
+                    _rowsInput = value;
+                    OnPropertyChanged(nameof(RowsInput));
+                }
+            }
+        }
+
+        public string ColumnsInput
+        {
+            get { return _columnsInput; }
+            set
+            {
+                if (_columnsInput != value)
+                {
+                    _columnsInput = value;
+                    OnPropertyChanged(nameof(ColumnsInput));
+                }
+            }
+        }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+}
